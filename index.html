@@ -348,7 +348,7 @@
         let score = 0;
         let streak = 0;
         let maxStreak = 0;
-        let activeDeck = []; // Queue deck untuk menjamin zero pengulangan
+        let activeDeck = []; // Deck queue teracak tanpa pengulangan
         let currentWordObj = null;
         let currentRack = [];
         let selectedSlots = [];
@@ -467,7 +467,7 @@
             score = 0;
             streak = 0;
             maxStreak = 0;
-            // Buat deck 100 soal teracak sempurna tanpa duplikasi
+            // Kocok 100 kosakata N5 ke dalam antrean deck untuk menjamin zero repeat
             activeDeck = shuffleArray(n5Vocabulary);
             
             document.getElementById('completion-modal').classList.add('hidden');
@@ -489,7 +489,7 @@
             document.getElementById('feedback').textContent = '';
             document.getElementById('word-romaji').textContent = "???";
 
-            // Ambil 1 kata unik dari deck queue yang sudah diacak
+            // Mengambil 1 kata unik dari deck queue
             currentWordObj = activeDeck.pop();
 
             document.getElementById('category-badge').textContent = currentWordObj.category;
