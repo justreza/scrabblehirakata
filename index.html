@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kana Scrabble N5 - Nihongo Daily</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        japanese: ['Kosugi Maru', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kosugi+Maru&display=swap" rel="stylesheet">
+    <style>
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tile-shadow {
+            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.4), 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .tile-shadow:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-cyan-500 selection:text-slate-950">
+
+    <!-- Header -->
+    <header class="w-full max-w-2xl mx-auto p-4 sm:p-6 flex justify-between items-center border-b border-slate-800/60">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold text-xl shadow-[0_0_15px_rgba(34,211,238,0.2)]">字</div>
+            <div>
+                <h1 class="font-bold text-lg text-slate-100 tracking-wide font-japanese">Kana Scrabble <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 ml-1">N5</span></h1>
+                <p class="text-xs text-slate-400">Susun Kosakata Dasar Bahasa Jepang</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4 text-sm">
+            <div class="glass-panel px-3 py-1.5 rounded-lg flex items-center space-x-2">
+                <span class="text-slate-400">Skor:</span>
+                <span id="score" class="font-bold text-cyan-400">0</span>
+            </div>
+            <div class="glass-panel px-3 py-1.5 rounded-lg flex items-center space-x-2">
+                <span class="text-slate-400">Streak:</span>
+                <span id="streak" class="font-bold text-emerald-400">🔥 0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="w-full max-w-xl mx-auto p-4 sm:p-6 flex-grow flex flex-col justify-center">
+        
+        <!-- Game Card -->
+        <div class="glass-panel rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            <!-- Glow Accent -->
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Round Info & Progress -->
+            <div class="flex justify-between items-center mb-6 text-xs text-slate-400 font-medium">
+                <span id="round-indicator">Soal 1 dari 10</span>
+                <span id="category-badge" class="px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-300">Benda & Sehari-hari</span>
+            </div>
+
+            <!-- Meaning Prompt -->
+            <div class="text-center mb-8">
+                <p class="text-xs uppercase tracking-wider text-cyan-400 mb-1 font-semibold">Artinya adalah:</p>
+                <h2 id="word-meaning" class="text-3xl sm:text-4xl font-extrabold text-slate-100 font-sans">Memuat...</h2>
+                <p id="word-romaji" class="text-sm text-slate-400 mt-2 italic">Romaji: ?</p>
+            </div>
+
+            <!-- Drop Slots / Answer Area -->
+            <div class="mb-8">
+                <p class="text-xs text-slate-400 text-center mb-3">Ketuk ubin di bawah untuk menyusun huruf:</p>
+                <div id="answer-slots" class="flex justify-center items-center gap-2 sm:gap-3 min-h-[64px] flex-wrap">
+                    <!-- Dinamis terisi slot ubin -->
+                </div>
+            </div>
+
+            <!-- Scrabble Tile Rack -->
+            <div class="mb-8 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                <p class="text-xs text-slate-400 text-center mb-3">Ubin Huruf Tersedia (Pilih yang benar):</p>
+                <div id="tile-rack" class="flex justify-center items-center gap-2 sm:gap-3 flex-wrap min-h-[50px]">
+                    <!-- Dinamis terisi huruf -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3">
+                <button onclick="clearSlots()" class="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-sm transition border border-slate-700 shadow-sm">
+                    Reset Ubin
+                </button>
+                <button onclick="checkAnswer()" class="flex-1 py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+                    Periksa Jawaban
+                </button>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="feedback" class="mt-4 text-center text-sm font-medium h-6"></div>
+        </div>
+
+    </main>
+
+    <!-- Footer / Credits -->
+    <footer class="w-full max-w-2xl mx-auto p-4 text-center text-xs text-slate-500 border-t border-slate-800/60">
+        Nihongo Daily &bull; Kana Scrabble N5 Mini Game &copy; 2026
+    </footer>
+
+    <!-- Game Over / Completion Modal -->
+    <div id="completion-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-panel max-w-md w-full p-8 rounded-2xl text-center shadow-2xl border border-cyan-500/30">
+            <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-cyan-500/40 shadow-[0_0_25px_rgba(34,211,238,0.4)]">🎉</div>
+            <h3 class="text-2xl font-bold text-slate-100 mb-2 font-japanese">Sugi desu ne! Luar Biasa!</h3>
+            <p class="text-sm text-slate-300 mb-6">Kamu telah menyelesaikan sesi Kana Scrabble N5 dengan gemilang.</p>
+            <div class="bg-slate-900/80 p-4 rounded-xl mb-6 border border-slate-800 flex justify-around">
+                <div>
+                    <p class="text-xs text-slate-400">Total Skor</p>
+                    <p id="final-score" class="text-2xl font-bold text-cyan-400">0</p>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-400">Streak Tertinggi</p>
+                    <p id="final-streak" class="text-2xl font-bold text-emerald-400">0</p>
+                </div>
+            </div>
+            <button onclick="restartGame()" class="w-full py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+                Main Lagi
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Game Logic & Web Audio API -->
+    <script>
+        // Data Kosakata Dasar N5 (Hiragana & Katakana)
+        const n5Vocabulary = [
+            { word: "りんご", romaji: "ringo", meaning: "Apel", category: "Buah" },
+            { word: "みず", romaji: "mizu", meaning: "Air Mineral", category: "Minuman & Makanan" },
+            { word: "ほん", romaji: "hon", meaning: "Buku", category: "Alat Tulis" },
+            { word: "ねこ", romaji: "neko", meaning: "Kucing", category: "Hewan" },
+            { word: "いぬ", romaji: "inu", meaning: "Anjing", category: "Hewan" },
+            { word: "くるま", romaji: "kuruma", meaning: "Mobil", category: "Transportasi" },
+            { word: "さくら", romaji: "sakura", meaning: "Bunga Sakura", category: "Alam" },
+            { word: "たまご", romaji: "tamago", meaning: "Telur", category: "Makanan" },
+            { word: "パン", romaji: "pan", meaning: "Roti (Katakana)", category: "Makanan" },
+            { word: "さかな", romaji: "sakana", meaning: "Ikan", category: "Hewan" },
+            { word: "つくえ", romaji: "tsukue", meaning: "Meja", category: "Benda" },
+            { word: "いす", romaji: "isu", meaning: "Kursi", category: "Benda" },
+            { word: "えいが", romaji: "eiga", meaning: "Film / Bioskop", category: "Hiburan" },
+            { word: "ごはん", romaji: "gohan", meaning: "Nasi / Makanan", category: "Makanan" },
+            { word: "みち", romaji: "michi", meaning: "Jalan", category: "Tempat" },
+            { word: "カメラ", romaji: "kamera", meaning: "Kamera (Katakana)", category: "Elektronik" },
+            { word: "ミルク", romaji: "miruku", meaning: "Susu (Katakana)", category: "Minuman" },
+            { word: "やま", romaji: "yama", meaning: "Gunung", category: "Alam" },
+            { word: "Sora", wordAlt: "そら", romaji: "sora", meaning: "Langit", category: "Alam" },
+            { word: "Hana", wordAlt: "はな", romaji: "hana", meaning: "Bunga / Hidung", category: "Tubuh & Alam" }
+        ];
+
+        // Perbaikan properti kata jika ada
+        const wordsList = n5Vocabulary.map(item => ({
+            word: item.wordAlt || item.word,
+            romaji: item.romaji,
+            meaning: item.meaning,
+            category: item.category
+        }));
+
+        let currentRound = 0;
+        let maxRounds = 10;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let currentWordObj = null;
+        let currentTiles = []; // Huruf di rack yang tersedia
+        let selectedSlots = []; // Huruf yang sudah diletakkan di slot jawaban
+
+        // Web Audio API Sound Generator
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(frequency, type, duration, delay = 0) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = frequency;
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration);
+                }, delay);
+            } catch (e) {
+                // Ignore audio context restrictions before user interaction
+            }
+        }
+
+        function soundClick() { playTone(600, 'sine', 0.08); }
+        function soundSuccess() { 
+            playTone(523.25, 'triangle', 0.1, 0); 
+            playTone(659.25, 'triangle', 0.1, 100); 
+            playTone(783.99, 'triangle', 0.2, 200); 
+        }
+        function soundError() { 
+            playTone(200, 'sawtooth', 0.15, 0); 
+            playTone(150, 'sawtooth', 0.2, 100); 
+        }
+
+        // Shuffle helper
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startGame() {
+            currentRound = 0;
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            document.getElementById('completion-modal').classList.add('hidden');
+            document.getElementById('completion-modal').classList.remove('flex');
+            loadNewRound();
+        }
+
+        function loadNewRound() {
+            if (currentRound >= maxRounds) {
+                showCompletionModal();
+                return;
+            }
+
+            currentRound++;
+            document.getElementById('round-indicator').textContent = `Soal ${currentRound} dari ${maxRounds}`;
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = `🔥 ${streak}`;
+            document.getElementById('feedback').textContent = '';
+
+            // Pilih kata secara acak
+            const randomIndex = Math.floor(Math.random() * wordsList.length);
+            currentWordObj = wordsList[randomIndex];
+
+            document.getElementById('word-meaning').textContent = currentWordObj.meaning;
+            document.getElementById('word-romaji').textContent = `Romaji: ${currentWordObj.romaji}`;
+            document.getElementById('category-badge').textContent = currentWordObj.category;
+
+            // Buat ubin huruf dari kata yang dipilih + 1 atau 2 huruf distraktor (opsional scrabble feel)
+            let wordChars = currentWordObj.word.split('');
+            let distractors = ['あ', 'い', 'う', 'え', 'お', 'ん', 'か', 'き'];
+            let randomDistractor = distractors[Math.floor(Math.random() * distractors.length)];
+            
+            // Masukkan huruf kata ditambah 1 huruf pengecoh agar mirip scrabble rack asli
+            let rackChars = [...wordChars];
+            if (rackChars.length < 4) {
+                rackChars.push(randomDistractor);
+            }
+            
+            currentTiles = shuffleArray(rackChars).map((char, index) => ({
+                id: `tile-${index}`,
+                char: char,
+                used: false
+            }));
+
+            selectedSlots = new Array(wordChars.length).fill(null);
+
+            renderBoard();
+        }
+
+        function renderBoard() {
+            // Render Slots
+            const slotsContainer = document.getElementById('answer-slots');
+            slotsContainer.innerHTML = '';
+            selectedSlots.forEach((tile, slotIndex) => {
+                const slotBtn = document.createElement('button');
+                slotBtn.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-bold font-japanese transition border ${
+                    tile ? 'bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.2)]' : 'bg-slate-900/80 border-slate-700/60 text-slate-600'
+                }`;
+                slotBtn.textContent = tile ? tile.char : '_';
+                slotBtn.onclick = () => {
+                    if (tile) {
+                        soundClick();
+                        // Kembalikan ubin ke rack
+                        const originalTile = currentTiles.find(t => t.id === tile.id);
+                        if (originalTile) originalTile.used = false;
+                        selectedSlots[slotIndex] = null;
+                        renderBoard();
+                    }
+                };
+                slotsContainer.appendChild(slotBtn);
+            });
+
+            // Render Rack Tiles
+            const rackContainer = document.getElementById('tile-rack');
+            rackContainer.innerHTML = '';
+            currentTiles.forEach((tile) => {
+                const tileBtn = document.createElement('button');
+                tileBtn.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center text-xl sm:text-2xl font-bold font-japanese transition tile-shadow border ${
+                    tile.used 
+                        ? 'bg-slate-800/40 border-slate-800 text-slate-600 opacity-40 cursor-not-allowed' 
+                        : 'bg-slate-800 hover:bg-slate-700 border-slate-600 text-cyan-300 hover:border-cyan-400'
+                }`;
+                tileBtn.textContent = tile.char;
+                tileBtn.disabled = tile.used;
+                tileBtn.onclick = () => {
+                    if (!tile.used) {
+                        soundClick();
+                        // Masukkan ke slot kosong pertama
+                        const emptyIndex = selectedSlots.findIndex(s => s === null);
+                        if (emptyIndex !== -1) {
+                            selectedSlots[emptyIndex] = tile;
+                            tile.used = true;
+                            renderBoard();
+                        }
+                    }
+                };
+                rackContainer.appendChild(tileBtn);
+            });
+        }
+
+        function clearSlots() {
+            soundClick();
+            currentTiles.forEach(t => t.used = false);
+            selectedSlots = new Array(currentWordObj.word.length).fill(null);
+            renderBoard();
+            document.getElementById('feedback').textContent = '';
+        }
+
+        function checkAnswer() {
+            const feedbackEl = document.getElementById('feedback');
+            
+            // Cek apakah semua slot terisi
+            if (selectedSlots.some(s => s === null)) {
+                soundError();
+                feedbackEl.className = "mt-4 text-center text-sm font-medium h-6 text-amber-400";
+                feedbackEl.textContent = "⚠️ Lengkapi semua slot ubin terlebih dahulu!";
+                return;
+            }
+
+            const formedWord = selectedSlots.map(t => t.char).join('');
+            
+            if (formedWord === currentWordObj.word) {
+                soundSuccess();
+                score += 10 + (streak * 2);
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+                
+                feedbackEl.className = "mt-4 text-center text-sm font-medium h-6 text-emerald-400 font-semibold";
+                feedbackEl.textContent = "✨ Benar! Seikai! (+poin)";
+                
+                setTimeout(() => {
+                    loadNewRound();
+                }, 1200);
+            } else {
+                soundError();
+                streak = 0;
+                document.getElementById('streak').textContent = `🔥 ${streak}`;
+                feedbackEl.className = "mt-4 text-center text-sm font-medium h-6 text-rose-400 font-semibold";
+                feedbackEl.textContent = "❌ Belum tepat. Coba susun ulang!";
+            }
+        }
+
+        function showCompletionModal() {
+            soundSuccess();
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-streak').textContent = maxStreak;
+            const modal = document.getElementById('completion-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function restartGame() {
+            soundClick();
+            startGame();
+        }
+
+        // Mulai game saat halaman dimuat
+        window.onload = () => {
+            startGame();
+        };
+    </script>
+</body>
+  </html>
