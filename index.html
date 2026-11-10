@@ -13,94 +13,93 @@
                 extend: {
                     colors: {
                         brand: {
-                            bg: '#090d16',
-                            card: '#111827',
+                            bg: '#070a10',
+                            card: '#0f172a',
                             border: 'rgba(255, 255, 255, 0.08)',
                             primary: '#06b6d4',
                             accent: '#f59e0b'
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
                         japanese: ['Kosugi Maru', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kosugi+Maru&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Kosugi+Maru&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #090d16;
+            background-color: #070a10;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+                radial-gradient(ellipse 60% 50% at 50% -20%, rgba(6, 182, 212, 0.12), transparent),
+                radial-gradient(ellipse 40% 40% at 100% 100%, rgba(99, 102, 241, 0.08), transparent);
+            background-attachment: fixed;
         }
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .panel-surface {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
         }
         .letter-chip {
-            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-            transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s ease;
+            box-shadow: 0 4px 0 0 #020617, inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+            transition: transform 0.06s ease, box-shadow 0.06s ease, background-color 0.15s ease;
         }
         .letter-chip:active:not(:disabled) {
             transform: translateY(3px);
-            box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 1px 0 0 #020617, inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
         }
-        .slot-target {
-            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.6);
+        .target-slot {
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col justify-between font-sans selection:bg-cyan-500 selection:text-slate-950">
 
-    <!-- Start Screen / Opening Menu -->
+    <!-- Opening Screen -->
     <div id="start-screen" class="w-full max-w-xl mx-auto p-4 sm:p-6 my-auto flex flex-col items-center justify-center min-h-[85vh]">
-        <div class="glass-panel w-full rounded-3xl p-8 sm:p-10 text-center shadow-2xl relative overflow-hidden border border-cyan-500/20">
-            <!-- Glow FX -->
-            <div class="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="panel-surface w-full rounded-3xl p-8 sm:p-10 text-center shadow-2xl relative overflow-hidden border border-cyan-500/20">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
             
-            <!-- Badge Icon -->
-            <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-extrabold text-4xl shadow-[0_0_30px_rgba(6,182,212,0.2)] font-japanese mx-auto mb-6">字</div>
+            <div class="w-20 h-20 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-black text-4xl shadow-[0_0_30px_rgba(6,182,212,0.2)] font-japanese mx-auto mb-6">字</div>
             
             <h1 class="text-3xl sm:text-4xl font-black text-slate-100 tracking-tight font-japanese mb-2">Kana Scrabble</h1>
-            <p class="text-xs sm:text-sm text-cyan-400 font-semibold tracking-wider uppercase mb-6">JLPT N5 Pro Edition &bull; 100 Kosakata</p>
+            <p class="text-xs sm:text-sm text-cyan-400 font-bold tracking-wider uppercase mb-6">JLPT N5 Pro Edition &bull; 100 Kosakata Non-Repeat</p>
 
             <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-8 max-w-md mx-auto">
-                Uji dan pertajam kemampuan membaca Hiragana & Katakana kamu. Susun kepingan huruf sesuai kosakata dasar JLPT N5!
+                Uji dan latih kecepatan membaca Hiragana & Katakana. Susun kepingan huruf sesuai kata dasar N5 tanpa pengulangan soal.
             </p>
 
-            <!-- Mode Selection on Start Screen -->
-            <div class="mb-8 text-left bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
-                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 text-center">Pilih Mode Permainan:</label>
+            <!-- Mode Selection -->
+            <div class="mb-8 text-left bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 text-center">Pilih Mode Latihan:</label>
                 <div class="grid grid-cols-1 gap-2.5">
-                    <button id="start-mode-id-jp" onclick="selectStartMode('id-jp')" class="w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+                    <button id="start-mode-id-jp" onclick="selectStartMode('id-jp')" class="w-full py-3.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
                         <span>🇮🇩 Indonesia ➔ 🇯🇵 Kana</span>
-                        <span class="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded font-extrabold">AKTIF</span>
+                        <span class="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded font-black">AKTIF</span>
                     </button>
-                    <button id="start-mode-jp-id" onclick="selectStartMode('jp-id')" class="w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200">
+                    <button id="start-mode-jp-id" onclick="selectStartMode('jp-id')" class="w-full py-3.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200">
                         <span>🇯🇵 Kana ➔ 🇮🇩 Indonesia</span>
-                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-extrabold">PILIH</span>
+                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-black">PILIH</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Start Game Button -->
-            <button onclick="launchGame()" class="w-full py-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm tracking-wide transition shadow-[0_0_25px_rgba(6,182,212,0.4)] transform active:scale-[0.99]">
+            <button onclick="launchGame()" class="w-full py-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm tracking-wide transition shadow-[0_0_25px_rgba(6,182,212,0.35)] active:scale-[0.99]">
                 🚀 MULAI PERMAINAN
             </button>
         </div>
     </div>
 
-    <!-- Main Game Section (Initially Hidden) -->
+    <!-- Main Workspace -->
     <div id="game-screen" class="hidden flex-col justify-between min-h-screen">
-        <!-- Header Navigation -->
+        <!-- Header Nav -->
         <header class="w-full max-w-3xl mx-auto p-4 sm:p-6 flex justify-between items-center border-b border-slate-800/60">
             <div class="flex items-center space-x-3">
-                <button onclick="returnToMenu()" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 transition flex items-center space-x-1 text-xs font-semibold" title="Kembali ke Menu Utama">
+                <button onclick="returnToMenu()" class="p-2 px-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 transition flex items-center space-x-1.5 text-xs font-semibold" title="Kembali ke Menu Utama">
                     <span>🏠 Menu</span>
                 </button>
                 <div>
@@ -112,53 +111,50 @@
             </div>
             
             <div class="flex items-center space-x-2 sm:space-x-4">
-                <!-- Audio Toggle -->
                 <button id="audio-toggle" onclick="toggleAudio()" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 transition" title="Mute/Unmute">
                     🔊
                 </button>
                 
-                <!-- Score & Streak -->
-                <div class="glass-panel px-3 py-1.5 rounded-xl flex items-center space-x-3 text-xs">
+                <div class="panel-surface px-3 py-1.5 rounded-xl flex items-center space-x-3 text-xs">
                     <div>
-                        <span class="text-slate-400 block text-[10px]">SKOR</span>
-                        <span id="score" class="font-extrabold text-cyan-400 text-sm">0</span>
+                        <span class="text-slate-400 block text-[9px] font-bold">SKOR</span>
+                        <span id="score" class="font-black text-cyan-400 text-sm">0</span>
                     </div>
                     <div class="h-6 w-[1px] bg-slate-800"></div>
                     <div>
-                        <span class="text-slate-400 block text-[10px]">STREAK</span>
-                        <span id="streak" class="font-extrabold text-amber-400 text-sm">🔥 0</span>
+                        <span class="text-slate-400 block text-[9px] font-bold">STREAK</span>
+                        <span id="streak" class="font-black text-amber-400 text-sm">🔥 0</span>
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- Game Workspace -->
+        <!-- Game Card -->
         <main class="w-full max-w-2xl mx-auto p-4 sm:p-6 flex-grow flex flex-col justify-center">
 
-            <!-- Mode Selector inside Game -->
+            <!-- Mode Selector Switcher -->
             <div class="mb-5 flex justify-center">
-                <div class="glass-panel p-1 rounded-xl flex space-x-1 border border-slate-800">
-                    <button id="mode-id-jp" onclick="switchMode('id-jp')" class="px-4 py-2 rounded-lg text-xs font-semibold transition bg-cyan-500 text-slate-950 shadow-md">
+                <div class="panel-surface p-1 rounded-xl flex space-x-1 border border-slate-800">
+                    <button id="mode-id-jp" onclick="switchMode('id-jp')" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-cyan-500 text-slate-950 shadow-md">
                         🇮🇩 Indonesia ➔ 🇯🇵 Kana
                     </button>
-                    <button id="mode-jp-id" onclick="switchMode('jp-id')" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                    <button id="mode-jp-id" onclick="switchMode('jp-id')" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition">
                         🇯🇵 Kana ➔ 🇮🇩 Indonesia
                     </button>
                 </div>
             </div>
 
             <!-- Card Board -->
-            <div class="glass-panel rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                <!-- Ambient Glow -->
+            <div class="panel-surface rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                <!-- Question Metadata -->
+                <!-- Round Metadata -->
                 <div class="flex justify-between items-center mb-6 text-xs text-slate-400">
-                    <span id="round-indicator" class="font-medium">Soal 1 dari 100</span>
-                    <span id="category-badge" class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 font-medium">Benda & Sehari-hari</span>
+                    <span id="round-indicator" class="font-semibold text-slate-300">Soal 1 dari 100</span>
+                    <span id="category-badge" class="px-2.5 py-1 rounded-md bg-slate-950 border border-slate-800 text-slate-300 font-semibold">Benda & Sehari-hari</span>
                 </div>
 
-                <!-- Target Word Prompt -->
+                <!-- Prompt Word -->
                 <div class="text-center mb-8">
                     <p id="prompt-label" class="text-[11px] uppercase tracking-wider text-cyan-400 font-bold mb-1">Susun Keping Huruf yang Tepat:</p>
                     <h2 id="word-target" class="text-3xl sm:text-4xl font-black text-slate-100 font-sans tracking-wide">Memuat...</h2>
@@ -171,24 +167,24 @@
                 <!-- Target Slots -->
                 <div class="mb-8">
                     <div id="answer-slots" class="flex justify-center items-center gap-2 sm:gap-2.5 min-h-[64px] flex-wrap">
-                        <!-- Dinamis terisi slot huruf -->
+                        <!-- Dinamis -->
                     </div>
                 </div>
 
                 <!-- Letter Rack -->
-                <div class="mb-6 bg-slate-950/60 p-4 sm:p-5 rounded-2xl border border-slate-800/80">
+                <div class="mb-6 bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-slate-800/80">
                     <div class="flex justify-between items-center mb-3 px-1">
-                        <span class="text-xs text-slate-400 font-medium">Pilihan Keping Huruf:</span>
-                        <button onclick="shuffleRack()" class="text-xs text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1 transition">
+                        <span class="text-xs text-slate-400 font-medium">Rak Keping Huruf:</span>
+                        <button onclick="shuffleRack()" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 transition">
                             🔄 Acak Rak
                         </button>
                     </div>
                     <div id="tile-rack" class="flex justify-center items-center gap-2 sm:gap-2.5 flex-wrap min-h-[56px]">
-                        <!-- Dinamis terisi kepingan -->
+                        <!-- Dinamis -->
                     </div>
                 </div>
 
-                <!-- Control Actions -->
+                <!-- Controls -->
                 <div class="grid grid-cols-3 gap-2 sm:gap-3">
                     <button onclick="clearSlots()" class="py-3 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs sm:text-sm transition border border-slate-800">
                         Reset
@@ -196,35 +192,33 @@
                     <button onclick="useHint()" class="py-3 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-semibold text-xs sm:text-sm transition">
                         💡 Hint (-50)
                     </button>
-                    <button onclick="checkAnswer()" class="py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs sm:text-sm transition shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                    <button onclick="checkAnswer()" class="py-3 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs sm:text-sm transition shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                         Periksa
                     </button>
                 </div>
 
-                <!-- Feedback Message -->
                 <div id="feedback" class="mt-4 text-center text-xs sm:text-sm font-semibold h-6"></div>
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="w-full max-w-2xl mx-auto p-4 text-center text-xs text-slate-500 border-t border-slate-800/60">
             Nihongo Daily &bull; Kana Scrabble N5 Pro Edition &copy; 2026
         </footer>
     </div>
 
-    <!-- Game Completion Modal -->
+    <!-- Completion Modal -->
     <div id="completion-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-        <div class="glass-panel max-w-md w-full p-8 rounded-2xl text-center shadow-2xl border border-cyan-500/30">
+        <div class="panel-surface max-w-md w-full p-8 rounded-2xl text-center shadow-2xl border border-cyan-500/30">
             <div class="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">🏆</div>
             <h3 class="text-2xl font-black text-slate-100 mb-1 font-japanese">Sesi Selesai!</h3>
-            <p class="text-xs text-slate-400 mb-6">Pencapaian latihan kosakata N5 kamu:</p>
+            <p class="text-xs text-slate-400 mb-6">Pencapaian latihan 100 kosakata N5 kamu:</p>
             
             <div class="grid grid-cols-2 gap-3 mb-6">
-                <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                <div class="bg-slate-950/90 p-4 rounded-xl border border-slate-800">
                     <p class="text-[10px] text-slate-400 uppercase font-bold">Total Skor</p>
                     <p id="final-score" class="text-2xl font-black text-cyan-400">0</p>
                 </div>
-                <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+                <div class="bg-slate-950/90 p-4 rounded-xl border border-slate-800">
                     <p class="text-[10px] text-slate-400 uppercase font-bold">Max Streak</p>
                     <p id="final-streak" class="text-2xl font-black text-amber-400">0</p>
                 </div>
@@ -348,19 +342,13 @@
             { word: "そと", romaji: "soto", meaning: "Luar", category: "Posisi" }
         ];
 
-        const vocabulary = n5Vocabulary.map(item => ({
-            word: item.word,
-            romaji: item.romaji,
-            meaning: item.meaning,
-            category: item.category
-        }));
-
         let gameMode = 'id-jp';
         let currentRound = 0;
         let maxRounds = 100;
         let score = 0;
         let streak = 0;
         let maxStreak = 0;
+        let activeDeck = []; // Queue deck untuk menjamin zero pengulangan
         let currentWordObj = null;
         let currentRack = [];
         let selectedSlots = [];
@@ -405,6 +393,7 @@
             document.getElementById('audio-toggle').textContent = isAudioMuted ? '🔇' : '🔊';
         }
 
+        // Shuffle Array (Fisher-Yates)
         function shuffleArray(array) {
             let arr = [...array];
             for (let i = arr.length - 1; i > 0; i--) {
@@ -414,7 +403,6 @@
             return arr;
         }
 
-        // Start Screen Navigation Logic
         function selectStartMode(mode) {
             soundClick();
             gameMode = mode;
@@ -422,17 +410,17 @@
             const btnJpId = document.getElementById('start-mode-jp-id');
             
             if (mode === 'id-jp') {
-                btnIdJp.className = "w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]";
-                btnIdJp.innerHTML = '<span>🇮🇩 Indonesia ➔ 🇯🇵 Kana</span><span class="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded font-extrabold">AKTIF</span>';
+                btnIdJp.className = "w-full py-3.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]";
+                btnIdJp.innerHTML = '<span>🇮🇩 Indonesia ➔ 🇯🇵 Kana</span><span class="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded font-black">AKTIF</span>';
                 
-                btnJpId.className = "w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200";
-                btnJpId.innerHTML = '<span>🇯🇵 Kana ➔ 🇮🇩 Indonesia</span><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-extrabold">PILIH</span>';
+                btnJpId.className = "w-full py-3.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200";
+                btnJpId.innerHTML = '<span>🇯🇵 Kana ➔ 🇮🇩 Indonesia</span><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-black">PILIH</span>';
             } else {
-                btnJpId.className = "w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]";
-                btnJpId.innerHTML = '<span>🇯🇵 Kana ➔ 🇮🇩 Indonesia</span><span class="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded font-extrabold">AKTIF</span>';
+                btnJpId.className = "w-full py-3.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.15)]";
+                btnJpId.innerHTML = '<span>🇯🇵 Kana ➔ 🇮🇩 Indonesia</span><span class="text-[10px] bg-cyan-500 text-slate-950 px-2 py-0.5 rounded font-black">AKTIF</span>';
                 
-                btnIdJp.className = "w-full py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200";
-                btnIdJp.innerHTML = '<span>🇮🇩 Indonesia ➔ 🇯🇵 Kana</span><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-extrabold">PILIH</span>';
+                btnIdJp.className = "w-full py-3.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-between border bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200";
+                btnIdJp.innerHTML = '<span>🇮🇩 Indonesia ➔ 🇯🇵 Kana</span><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-black">PILIH</span>';
             }
         }
 
@@ -464,11 +452,11 @@
             const btnJpId = document.getElementById('mode-jp-id');
             
             if (mode === 'id-jp') {
-                btnIdJp.className = "px-4 py-2 rounded-lg text-xs font-semibold transition bg-cyan-500 text-slate-950 shadow-md";
-                btnJpId.className = "px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition";
+                btnIdJp.className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-cyan-500 text-slate-950 shadow-md";
+                btnJpId.className = "px-4 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition";
             } else {
-                btnJpId.className = "px-4 py-2 rounded-lg text-xs font-semibold transition bg-cyan-500 text-slate-950 shadow-md";
-                btnIdJp.className = "px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition";
+                btnJpId.className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-cyan-500 text-slate-950 shadow-md";
+                btnIdJp.className = "px-4 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition";
             }
             
             restartGame();
@@ -479,13 +467,16 @@
             score = 0;
             streak = 0;
             maxStreak = 0;
+            // Buat deck 100 soal teracak sempurna tanpa duplikasi
+            activeDeck = shuffleArray(n5Vocabulary);
+            
             document.getElementById('completion-modal').classList.add('hidden');
             document.getElementById('completion-modal').classList.remove('flex');
             loadNewRound();
         }
 
         function loadNewRound() {
-            if (currentRound >= maxRounds) {
+            if (currentRound >= maxRounds || activeDeck.length === 0) {
                 showCompletionModal();
                 return;
             }
@@ -498,8 +489,8 @@
             document.getElementById('feedback').textContent = '';
             document.getElementById('word-romaji').textContent = "???";
 
-            const randomIndex = Math.floor(Math.random() * vocabulary.length);
-            currentWordObj = vocabulary[randomIndex];
+            // Ambil 1 kata unik dari deck queue yang sudah diacak
+            currentWordObj = activeDeck.pop();
 
             document.getElementById('category-badge').textContent = currentWordObj.category;
 
@@ -513,7 +504,7 @@
                 targetString = currentWordObj.word;
                 targetUnits = targetString.split('');
 
-                // Generasi Keping Pengecoh Kana
+                // Distractor Kana (4 Pengecoh)
                 const kanaDistractors = ['あ','い','う','え','お','か','き','く','け','こ','さ','し','す','せ','そ','た','ち','つ','て','と','な','に','ぬ','ね','の','は','ひ','ふ','へ','ほ','ま','み','む','め','も','や','ゆ','よ','ら','り','る','れ','ろ','わ','を','ん','カ','キ','ク','ケ','コ','サ','シ','ス','セ','ソ','タ','チ','ツ','テ','ト','ナ','ニ','ヌ','ネ','ノ','ハ','ヒ','フ','ヘ','ホ','マ','ミ','ム','メ','モ','ヤ','ユ','ヨ','ラ','リ','ル','レ','ロ','ワ','ヲ','ン'];
                 let distractors = Array.from({length: 4}, () => kanaDistractors[Math.floor(Math.random() * kanaDistractors.length)]);
                 
@@ -548,7 +539,7 @@
         }
 
         function renderBoard() {
-            // Render Targets
+            // Render Slots
             const slotsContainer = document.getElementById('answer-slots');
             slotsContainer.innerHTML = '';
             
@@ -558,7 +549,7 @@
                 
                 slotBtn.className = `${
                     isKanaMode ? 'w-11 h-11 sm:w-13 sm:h-13 text-xl font-japanese' : 'px-3 py-2 text-xs sm:text-sm font-sans'
-                } rounded-xl flex items-center justify-center font-bold transition slot-target border ${
+                } rounded-xl flex items-center justify-center font-bold transition target-slot border ${
                     chip 
                         ? 'bg-cyan-500/20 border-cyan-500/60 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.25)]' 
                         : 'bg-slate-950/80 border-slate-800 text-slate-700'
@@ -577,7 +568,7 @@
                 slotsContainer.appendChild(slotBtn);
             });
 
-            // Render Letter Rack
+            // Render Rack
             const rackContainer = document.getElementById('tile-rack');
             rackContainer.innerHTML = '';
             
@@ -678,7 +669,7 @@
                 if (streak > maxStreak) maxStreak = streak;
                 
                 feedbackEl.className = "mt-4 text-center text-xs sm:text-sm font-semibold h-6 text-emerald-400";
-                feedbackEl.textContent = "✨ Correct! Seikai! (+poin)";
+                feedbackEl.textContent = "✨ Benar! Seikai! (+poin)";
                 
                 setTimeout(() => {
                     loadNewRound();
